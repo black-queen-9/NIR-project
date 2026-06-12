@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ title or "UI" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+    <div class="topbar-inner">
+        <div class="brand">UI</div>
+        <nav class="nav">
+            <a href="/sections">Сечения</a>
+            <a href="/materials">Материалы</a>
+            <a href="/section-types">Типы сечений</a>
+            <a href="/beams">Балки</a>
+        </nav>
+    </div>
+</header>
+
+<main class="page">
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

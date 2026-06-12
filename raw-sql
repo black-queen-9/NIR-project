@@ -1,0 +1,127 @@
+DROP TABLE IF EXISTS sections       CASCADE;
+DROP TABLE IF EXISTS section_types  CASCADE;
+DROP TABLE IF EXISTS materials      CASCADE;
+
+CREATE TABLE materials (
+    material_id        SERIAL PRIMARY KEY,
+    material_name      VARCHAR(100) NOT NULL,
+    description        TEXT,
+    characteristics    TEXT,
+    strength_mpa       NUMERIC(10, 2),
+    hardness_hb        NUMERIC(10, 2),
+    poisson_ratio      NUMERIC(4, 3),
+    young_modulus_gpa  NUMERIC(10, 2)
+);
+
+CREATE TABLE section_types (
+    section_type_id    SERIAL PRIMARY KEY,
+    section_type_name  VARCHAR(100) NOT NULL,
+    section_type_desc  TEXT
+);
+
+CREATE TABLE sections (
+    section_id         SERIAL PRIMARY KEY,
+    section_type_id    INT NOT NULL REFERENCES section_types(section_type_id)
+                       ON UPDATE CASCADE ON DELETE RESTRICT,
+    material_id        INT NOT NULL REFERENCES materials(material_id)
+                       ON UPDATE CASCADE ON DELETE RESTRICT,
+    section_name       VARCHAR(100) NOT NULL,
+    notes              TEXT
+);
+
+INSERT INTO materials (
+    material_name, description, characteristics,
+    strength_mpa, hardness_hb, poisson_ratio, young_modulus_gpa
+) VALUES
+    ('Сталь конструкционная',
+     'Углеродистая сталь для строительных конструкций.',
+     'Хорошая свариваемость, применяется в балках и колоннах.',
+     250.00, 120.00, 0.300, 210.00),
+    ('Алюминиевый сплав',
+     'Лёгкий сплав с хорошим соотношением прочность/масса.',
+     'Используется при требованиях к малому весу.',
+     150.00, 50.00, 0.330, 70.00),
+    ('Чугун',
+     'Высокая твёрдость и хрупкость.',
+     'Хорошо работает на сжатие.',
+     200.00, 180.00, 0.260, 110.00),
+    ('Нержавеющая сталь',
+     'Коррозионностойкая сталь.',
+     'Используется в агрессивных средах.',
+     300.00, 140.00, 0.290, 200.00);
+
+INSERT INTO section_types (section_type_name, section_type_desc) VALUES
+    ('Круглое',       'Сплошное круглое сечение'),
+    ('Прямоугольное', 'Сплошное прямоугольное сечение'),
+    ('Двутавр',       'Прокатный двутавр'),
+    ('Тавр',          'Т-образный профиль'),
+    ('Уголок',        'Равнополочный или неравнополочный уголок');
+
+INSERT INTO sections (section_type_id, material_id, section_name, notes) VALUES
+    (1, 1, 'Стальной круг Ø20',     'Круглый стержень Ø20 мм'),
+    (1, 2, 'Al круг Ø30',           'Алюминиевый стержень Ø30 мм'),
+    (1, 4, 'Нерж. круг Ø15',        'Нержавеющий стержень Ø15 мм'),
+    (2, 1, 'Прямоугольник 100x50',  'Сталь конструкционная'),
+    (2, 3, 'Чугунный брус 80x40',   'Чугун'),
+    (3, 1, 'Двутавр №20',           'Прокатный профиль'),
+    (3, 4, 'Нерж. двутавр №12',     'Нержавеющий профиль'),
+    (5, 1, 'Уголок 50x50x5',        'Стальной уголок');
+
+SELECT * FROM materials;
+SELECT * FROM section_types;
+SELECT * FROM sections;
+
+SELECT
+    s.section_id,
+    s.section_name,
+    st.section_type_name AS section_type,
+    m.material_name      AS material
+FROM sections s
+JOIN section_types st ON s.section_type_id = st.section_type_id
+JOIN materials m      ON s.material_id = m.material_id
+ORDER BY s.section_id;
+
+SELECT
+    s.section_id,
+    s.section_name,
+    st.section_type_name AS section_type
+FROM sections s
+JOIN section_types st ON s.section_type_id = st.section_type_id
+JOIN materials m ON s.material_id = m.material_id
+WHERE m.material_name = 'Сталь конструкционная';
+
+SELECT
+    material_name,
+    young_modulus_gpa,
+    strength_mpa,
+    hardness_hb
+FROM materials
+WHERE young_modulus_gpa > 150
+ORDER BY young_modulus_gpa DESC;
+
+SELECT
+    material_name,
+    poisson_ratio
+FROM materials
+WHERE poisson_ratio BETWEEN 0.280 AND 0.320
+ORDER BY poisson_ratio;
+
+SELECT
+    st.section_type_name,
+    COUNT(s.section_id) AS sections_count
+FROM section_types st
+LEFT JOIN sections s ON s.section_type_id = st.section_type_id
+GROUP BY st.section_type_name
+ORDER BY st.section_type_name;
+
+SELECT
+    m.material_name,
+    COUNT(s.section_id) AS sections_count
+FROM materials m
+LEFT JOIN sections s ON s.material_id = m.material_id
+GROUP BY m.material_name
+ORDER BY sections_count DESC;
+
+UPDATE sections
+SET notes = 'Обновлённое примечание'
+WHERE section_name = 'Стальной круг Ø20';

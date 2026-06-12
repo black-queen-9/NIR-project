@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Балки</h2>
+        <a class="btn btn-primary" href="/beams/new">+ Добавить балку</a>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Сечение</th>
+                <th>Материал</th>
+                <th>Длина (м)</th>
+                <th>Примечание</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for b in beams %}
+                <tr>
+                    <td>{{ b.beam_id }}</td>
+                    <td>{{ b.beam_name }}</td>
+                    <td>{{ b.section.section_name }}</td>
+                    <td>{{ b.material.material_name }}</td>
+                    <td>{{ b.length_m }}</td>
+                    <td>{{ b.notes if b.notes else "—" }}</td>
+                    <td class="table-actions">
+                        <form method="post" action="/beams/{{ b.beam_id }}/delete">
+                            <button class="btn btn-danger" onclick="return confirm('Удалить балку?');">
+                                Удалить
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

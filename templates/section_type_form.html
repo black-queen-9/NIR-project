@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card card-form">
+    <h2>Добавить тип сечения</h2>
+
+    <form method="post" action="/section-types/new" class="form">
+        <div class="form-row">
+            <label for="section_type_name">Название</label>
+            <input type="text" id="section_type_name" name="section_type_name" required>
+        </div>
+
+        <div class="form-row">
+            <label for="section_type_desc">Описание</label>
+            <textarea id="section_type_desc" name="section_type_desc" rows="3"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href="/section-types" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

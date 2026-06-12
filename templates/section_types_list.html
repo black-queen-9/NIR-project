@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Типы сечений</h2>
+        <a class="btn btn-primary" href="/section-types/new">+ Добавить тип</a>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for t in section_types %}
+                <tr>
+                    <td>{{ t.section_type_id }}</td>
+                    <td>{{ t.section_type_name }}</td>
+                    <td>{{ t.section_type_desc if t.section_type_desc else "—" }}</td>
+                    <td class="table-actions">
+                        <form method="post" action="/section-types/{{ t.section_type_id }}/delete">
+                            <button class="btn btn-danger" onclick="return confirm('Удалить тип?');">
+                                Удалить
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
