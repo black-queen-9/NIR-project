@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base, relationship, Session
 from sqlalchemy.exc import IntegrityError
 
 
-DATABASE_URL = "postgresql+psycopg2://postgres:postgres@localhost:5432/materials_sections_db"
+DATABASE_URL = "postgresql+psycopg2://postgres:228007@localhost:5432/materials_sections_db"
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
