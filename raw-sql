@@ -29,6 +29,18 @@ CREATE TABLE sections (
     notes              TEXT
 );
 
+CREATE TABLE beams (
+    beam_id         SERIAL PRIMARY KEY,
+    beam_name       VARCHAR(100) NOT NULL,
+    section_id      INT NOT NULL REFERENCES sections(section_id)
+                    ON UPDATE CASCADE ON DELETE RESTRICT,
+    material_id     INT NOT NULL REFERENCES materials(material_id)
+                    ON UPDATE CASCADE ON DELETE RESTRICT,
+    length_m        NUMERIC(10, 2) NOT NULL,
+    notes           TEXT
+);
+
+
 INSERT INTO materials (
     material_name, description, characteristics,
     strength_mpa, hardness_hb, poisson_ratio, young_modulus_gpa
