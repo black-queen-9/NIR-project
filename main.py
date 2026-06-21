@@ -110,8 +110,9 @@ def list_sections(request: Request, db: Session = Depends(get_db)):
         .all()
     )
     return templates.TemplateResponse(
+        request,
         "sections_list.html",
-        {"request": request, "sections": sections, "title": "Сечения"},
+        {"sections": sections, "title": "Сечения"},
     )
 
 
@@ -120,9 +121,9 @@ def new_section_form(request: Request, db: Session = Depends(get_db)):
     section_types = db.query(SectionType).order_by(SectionType.section_type_name).all()
     materials = db.query(Material).order_by(Material.material_name).all()
     return templates.TemplateResponse(
+        request,
         "section_form.html",
         {
-            "request": request,
             "section_types": section_types,
             "materials": materials,
             "title": "Добавить сечение",
@@ -170,16 +171,18 @@ def delete_section(section_id: int, db: Session = Depends(get_db)):
 def list_materials(request: Request, db: Session = Depends(get_db)):
     materials = db.query(Material).order_by(Material.material_id).all()
     return templates.TemplateResponse(
+        request,
         "materials_list.html",
-        {"request": request, "materials": materials, "title": "Материалы"},
+        {"materials": materials, "title": "Материалы"},
     )
 
 
 @app.get("/materials/new", response_class=HTMLResponse)
 def new_material_form(request: Request):
     return templates.TemplateResponse(
+        request,
         "material_form.html",
-        {"request": request, "title": "Добавить материал"},
+        {"title": "Добавить материал"},
     )
 
 
@@ -230,16 +233,18 @@ def delete_material(material_id: int, db: Session = Depends(get_db)):
 def list_section_types(request: Request, db: Session = Depends(get_db)):
     types_ = db.query(SectionType).order_by(SectionType.section_type_id).all()
     return templates.TemplateResponse(
+        request,
         "section_types_list.html",
-        {"request": request, "section_types": types_, "title": "Типы сечений"},
+        {"section_types": types_, "title": "Типы сечений"},
     )
 
 
 @app.get("/section-types/new", response_class=HTMLResponse)
 def new_section_type_form(request: Request):
     return templates.TemplateResponse(
+        request,
         "section_type_form.html",
-        {"request": request, "title": "Добавить тип сечения"},
+        {"title": "Добавить тип сечения"},
     )
 
 
@@ -285,8 +290,9 @@ def list_beams(request: Request, db: Session = Depends(get_db)):
         .all()
     )
     return templates.TemplateResponse(
+        request,
         "beams_list.html",
-        {"request": request, "beams": beams, "title": "Балки"},
+        {"beams": beams, "title": "Балки"},
     )
 
 
@@ -295,8 +301,9 @@ def new_beam_form(request: Request, db: Session = Depends(get_db)):
     sections = db.query(Section).order_by(Section.section_name).all()
     materials = db.query(Material).order_by(Material.material_name).all()
     return templates.TemplateResponse(
+        request,
         "beam_form.html",
-        {"request": request, "sections": sections, "materials": materials, "title": "Добавить балку"},
+        {"sections": sections, "materials": materials, "title": "Добавить балку"},
     )
 
 
