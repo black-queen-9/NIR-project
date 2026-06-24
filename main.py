@@ -347,7 +347,7 @@ def api_materials(db: Session = Depends(get_db)):
         {
             "material_id": m.material_id,
             "material_name": m.material_name,
-            "description": m.description,
+            "description_mat": m.description,
             "strength_mpa": float(m.strength_mpa) if m.strength_mpa is not None else None,
             "hardness_hb": float(m.hardness_hb) if m.hardness_hb is not None else None,
             "young_modulus_gpa": float(m.young_modulus_gpa) if m.young_modulus_gpa is not None else None,
