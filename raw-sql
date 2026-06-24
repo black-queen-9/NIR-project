@@ -1,11 +1,12 @@
-DROP TABLE IF EXISTS sections       CASCADE;
-DROP TABLE IF EXISTS section_types  CASCADE;
 DROP TABLE IF EXISTS materials      CASCADE;
+DROP TABLE IF EXISTS section_types  CASCADE;
+DROP TABLE IF EXISTS sections       CASCADE;
+DROP TABLE IF EXISTS beams          CASCADE;
 
 CREATE TABLE materials (
     material_id        SERIAL PRIMARY KEY,
     material_name      VARCHAR(100) NOT NULL,
-    description        TEXT,
+    description_mat    TEXT,
     characteristics    TEXT,
     strength_mpa       NUMERIC(10, 2),
     hardness_hb        NUMERIC(10, 2),

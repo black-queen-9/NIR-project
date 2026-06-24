@@ -22,7 +22,7 @@ class Material(Base):
 
     material_id = Column(Integer, primary_key=True, index=True)
     material_name = Column(String(100), nullable=False)
-    description = Column(Text)
+    description_mat = Column(Text)
     characteristics = Column(Text)
     strength_mpa = Column(Numeric(10, 2))
     hardness_hb = Column(Numeric(10, 2))
@@ -66,7 +66,7 @@ class Beam(Base):
     material_id = Column(Integer, ForeignKey("materials.material_id"), nullable=False)
     length_m = Column(Numeric(10, 2), nullable=False)  # ВАЖНО: как в твоём SQL
     notes = Column(Text)
-
+    
     section = relationship("Section", back_populates="beams")
     material = relationship("Material", back_populates="beams")
 
@@ -163,7 +163,6 @@ def delete_section(section_id: int, db: Session = Depends(get_db)):
         db.rollback()
         # RESTRICT: если сечение используется в beams
         raise HTTPException(status_code=400, detail="Нельзя удалить: сечение используется в балках")
-
     return RedirectResponse(url="/sections", status_code=303)
 
 
@@ -199,7 +198,7 @@ def create_material(
 ):
     m = Material(
         material_name=material_name.strip(),
-        description=norm_text(description),
+        description_mat=norm_text(description),
         characteristics=norm_text(characteristics),
         strength_mpa=strength_mpa,
         hardness_hb=hardness_hb,
